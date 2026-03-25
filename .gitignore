@@ -2,3 +2,4 @@
 .venv
 venv/
 langchain
+__pycache__/
