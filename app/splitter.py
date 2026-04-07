@@ -2,8 +2,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 def dividir_texto(texto):
     separador_de_texto = RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50,
+    chunk_size=800,
+    chunk_overlap=100,
     separators=["\n\n", "\n", " ", ""]
     )
 
