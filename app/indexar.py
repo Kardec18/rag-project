@@ -1,7 +1,7 @@
-from loader import carregar_pdf
-from splitter import dividir_texto
-from embeddings import modelo_embedding
-from vectorstore import criar_indice, salvar_indice
+from app.loader import carregar_pdf
+from app.splitter import dividir_texto
+from app.embeddings import modelo_embedding
+from app.vectorstore import criar_indice, salvar_indice
 from dotenv import load_dotenv
 
 load_dotenv()
