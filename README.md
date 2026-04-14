@@ -105,29 +105,24 @@ python -m app.indexar # Execute primeiro o indexar.py, para criar o diretório s
 uvicorn api.api:app --reload
 ```
 
-## 📡 Endpoints da API
+## 🧪 Testando a API via cURL
 
 ### Health Check
 ```
-GET /health
+curl -X GET http://127.0.0.1:8000/health
 ```
 
 ### Fazer pergunta
 ```
-POST /ask
-Content-Type: application/json
-
-{
-  "question": "Para que serve a dipirona?"
-}
+curl -X POST http://127.0.0.1:8000/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Cimegripe serve para o que?"}'
 ```
 
 ### Upload de PDF
 ```
-POST /insert
-Content-Type: multipart/form-data
-
-file=@arquivo.pdf
+curl -X POST http://127.0.0.1:8000/insert \
+  -F "file=@/caminho/para/seu/arquivo.pdf"
 ```
 
 ## 📦 Estrutura de dados
