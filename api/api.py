@@ -13,6 +13,7 @@ load_dotenv()
 
 class UserQuestion(BaseModel):
     question: str
+    history: str = ""
 
 class AnswerResponse(BaseModel):
     answer: str
@@ -28,6 +29,7 @@ def health_check():
 @app.post("/ask", response_model=AnswerResponse)
 async def ask_llm(user_input: UserQuestion):
     pergunta = user_input.question
+    historico = user_input.history or ""
 
     if not pergunta.strip():
         raise HTTPException(status_code=400, detail="A pergunta não pode estar vazia.")
@@ -39,13 +41,17 @@ async def ask_llm(user_input: UserQuestion):
         chain = criar_chain(retriever)
 
         resposta = chain.invoke({
-            "query": user_input.question,
-            "historico": ""
+            "query": pergunta,
+            "historico": historico
         })
 
         return {"answer": resposta}
+    
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao processar a pergunta: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Erro ao processar a pergunta: {str(e)}"
+        )
     
 @app.post("/insert")
 async def insert_pdf(file: UploadFile = File()):

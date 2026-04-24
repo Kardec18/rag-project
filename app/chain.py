@@ -11,22 +11,29 @@ def criar_chain(retriever):
     )
 
     prompt_llm = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                "Use apenas o contexto recuperado e o histórico da conversa para responder. "
-                "Se a resposta não estiver no contexto, diga que não encontrou a informação. "
-                "Não invente informações."
-            ),
-            (
-                "human",
-                "Histórico da conversa:\n{historico}\n\n"
-                "Pergunta atual:\n{query}\n\n"
-                "Contexto recuperado:\n{contexto}\n\n"
-                "Resposta:"
-            )
-        ]
-    )
+    [
+        (
+            "system",
+            "Responda usando apenas o contexto recuperado e o histórico da conversa.\n\n"
+            "Regras obrigatórias:\n"
+            "- Se houver informação relevante no contexto, responda diretamente.\n"
+            "- NÃO diga que 'não encontrou completamente' ou qualquer variação disso.\n"
+            "- NÃO explique limitações do contexto.\n"
+            "- NÃO misture respostas com avisos.\n\n"
+            "Se NÃO houver informação suficiente:\n"
+            "- responda apenas: 'Não encontrei essa informação nos documentos disponíveis.'\n\n"
+            "Se houver informação parcial:\n"
+            "- responda normalmente com o que encontrou, sem avisos."
+        ),
+        (
+            "human",
+            "Histórico da conversa:\n{historico}\n\n"
+            "Pergunta atual:\n{query}\n\n"
+            "Contexto recuperado:\n{contexto}\n\n"
+            "Resposta:"
+        )
+    ]
+)
 
     setup = {
         "query": RunnableLambda(lambda x: x["query"]),
