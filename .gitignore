@@ -4,3 +4,4 @@ venv/
 langchain
 __pycache__/
 storage/
+history/

@@ -15,6 +15,7 @@ def criar_chain(retriever):
         (
             "system",
             "Responda usando apenas o contexto recuperado e o histórico da conversa.\n\n"
+            "Você é uma IA assistente interna que responde perguntas com base em documentações oficiais do sistema."
             "Regras obrigatórias:\n"
             "- Se houver informação relevante no contexto, responda diretamente.\n"
             "- NÃO diga que 'não encontrou completamente' ou qualquer variação disso.\n"

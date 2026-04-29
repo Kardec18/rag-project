@@ -1,109 +1,168 @@
-# 🧠 Projeto RAG com PDFs (LangChain + API + Docker)
+# 🧠 RAG Platform — Document Intelligence com LLMs
 
-Este projeto implementa um sistema de Retrieval-Augmented Generation (RAG) para consulta inteligente de documentos PDF, retornando respostas baseadas exclusivamente no conteúdo carregado.
+<p align="left">
+  <img src="https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-0.110-009688?logo=fastapi&logoColor=white" />
+  <img src="https://img.shields.io/badge/Streamlit-1.30-FF4B4B?logo=streamlit&logoColor=white" />
+  <img src="https://img.shields.io/badge/LangChain-RAG-black" />
+  <img src="https://img.shields.io/badge/FAISS-Vector%20Store-0467DF" />
+  <img src="https://img.shields.io/badge/OpenAI-LLM-412991?logo=openai&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker-Container-2496ED?logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker%20Compose-Orchestration-384d54" />
+</p>
 
-O sistema evoluiu de uma aplicação CLI para uma API com FastAPI, containerizada com Docker, permitindo execução padronizada e pronta para ambientes mais próximos de produção.
+## 📌 Visão Geral
 
-## 🎯 Objetivo do projeto
+Este projeto implementa uma plataforma de **Retrieval-Augmented Generation (RAG)** para consulta inteligente de documentos PDF, permitindo respostas baseadas exclusivamente em conhecimento interno.
 
-Este projeto foi desenvolvido com foco em:
+Diferente de um chatbot genérico, o sistema atua como uma **camada de inteligência sobre documentos**, reduzindo alucinação e garantindo respostas contextualizadas.
 
-- Aprender conceitos fundamentais de RAG
-- Construir uma aplicação real com API
-- Aplicar conceitos de containerização com Docker
-- Servir como base para evolução em MLOps / AI Platform
+A solução foi projetada com foco em:
+
+* Arquitetura modular
+* Separação clara entre backend e interface
+* Facilidade de evolução para ambientes produtivos
+
+---
+
+## 🎯 Problema
+
+LLMs por padrão:
+
+* Não possuem acesso a dados privados
+* Podem gerar respostas imprecisas (alucinação)
+* Não mantêm contexto específico de negócio
+
+A necessidade é permitir que usuários consultem documentos internos de forma natural, com respostas confiáveis.
+
+---
+
+## 💡 Solução
+
+A solução utiliza o padrão RAG:
+
+1. Indexação de documentos PDF
+2. Geração de embeddings
+3. Armazenamento vetorial
+4. Recuperação de contexto relevante
+5. Geração de resposta com LLM baseada apenas no contexto
+
+Além disso, foi construída uma aplicação completa com:
+
+* Backend via API
+* Interface de chat
+* Persistência de histórico local
+
+---
+
+## 🏗️ Arquitetura do Sistema
+
+![Arquitetura RAG](./docs/arquitetura-rag.png)
+
+---
 
 ## ⚙️ Funcionalidades
 
-- Leitura de múltiplos PDFs
-- Divisão de texto em chunks
-- Geração de embeddings
-- Armazenamento vetorial com FAISS
-- Recuperação de contexto relevante
-- Geração de respostas com LLM
-- API REST com FastAPI
-- Upload de novos documentos via API
-- Indexação automática de documentos
-- Containerização com Docker
+### 🔹 RAG Engine
 
-## 🏗️ Arquitetura
+* Processamento de múltiplos PDFs
+* Chunking inteligente
+* Geração de embeddings
+* Busca semântica
+* Respostas contextualizadas
+
+### 🔹 API
+
+* Endpoint `/ask` para perguntas
+* Endpoint `/health` para verificação
+* Endpoint `/insert` para ingestão de documentos
+
+### 🔹 Interface
+
+* Chat interativo
+* Histórico persistido localmente
+* Múltiplas conversas
+* Busca e organização de chats
+
+---
+
+## 🧰 Tecnologias Utilizadas
+
+### 🔹 Backend
+
+* Python
+* FastAPI
+* LangChain
+
+### 🔹 Frontend
+
+* Streamlit
+
+### 🔹 IA / Machine Learning
+
+* OpenAI API
+* Embeddings
+* RAG (Retrieval-Augmented Generation)
+
+### 🔹 Armazenamento Vetorial
+
+* FAISS
+
+### 🔹 Infraestrutura
+
+* Docker
+* Docker Compose
+
+---
+
+## 🧩 Stack por Camada
+
+| Camada    | Tecnologia | Responsabilidade     |
+| --------- | ---------- | -------------------- |
+| Interface | Streamlit  | Chat UI              |
+| API       | FastAPI    | Orquestração         |
+| RAG       | LangChain  | Pipeline IA          |
+| Vetor     | FAISS      | Busca semântica      |
+| LLM       | OpenAI     | Geração de respostas |
+| Infra     | Docker     | Containerização      |
+
+---
+
+## 📂 Estrutura do Projeto
+
 ```
 .
-├── api/
-│   └── api.py              # API FastAPI
-├── app/
-│   ├── loader.py           # Carrega PDFs
-│   ├── splitter.py         # Divide texto em chunks
-│   ├── embeddings.py       # Gera embeddings
-│   ├── vectorstore.py      # Cria e salva índice FAISS
-│   ├── retriever.py        # Recupera contexto
-│   ├── chain.py            # Integra LLM + contexto
-│   ├── indexar.py          # Pipeline de indexação
-│   └── main.py             # CLI (legado)
-├── documents/              # PDFs utilizados
-├── storage/                # Índice vetorial FAISS
-├── Dockerfile
-├── docker-compose.yml
-├── entrypoint.sh
-├── requirements.txt
-└── README.md
+├── api/                # Camada de API
+├── app/                # Lógica RAG
+├── streamlit_app.py    # Frontend
+├── documents/          # PDFs
+├── storage/            # Índice vetorial
+├── history/            # Conversas
+├── docs/               # Imagens e diagramas
 ```
 
-## 🚀 Como Executar
+---
 
-### Opção 1 - Execução com Docker (recomendado)
+## ▶️ Execução
 
-### 1. Criar o arquivo .env
+### 1. Variáveis de ambiente
+
 ```env
-OPENAI_API_KEY=sua_chave 
+OPENAI_API_KEY=your_key
 ```
 
-### 2. Subir a aplicação
-```
+### 2. Subir aplicação completa (API + Frontend)
+
+```bash
 docker compose up --build
 ```
 
-A API ficará disponível em:
+Serviços disponíveis em:
 
-```
-http://localhost:8000
-```
+* API: [http://localhost:8000](http://localhost:8000)
+* Frontend (Streamlit): [http://localhost:8501](http://localhost:8501)
 
-### Opção 2 - Execução local (sem Docker)
-
-### 1. Clone o projeto
-```bash
-git clone <repo>
-
-cd rag-project
-```
-
-### 2. Crie o ambiente virtual
-```bash
-python -m venv venv
-source venv/bin/activate  # Para iniciar o ambiente virtual em ambientes Linux/macOS
-venv\Scripts\activate     # Para iniciar o ambiente virtual em ambientes Windows
-```
-
-### 3. Instale as libs
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Crie um arquivo `.env` na raiz do projeto (Crie uma API KEY no painel da OPENAI):
-```env
-OPENAI_API_KEY=sua_chave 
-```
-
-### 5. Executar indexação
-```bash
-python -m app.indexar # Execute primeiro o indexar.py, para criar o diretório storage
-```
-
-### 6. Subir a API
-```bash
-uvicorn api.api:app --reload
-```
+---
 
 ## 🧪 Testando a API via cURL
 
@@ -124,55 +183,65 @@ curl -X POST http://127.0.0.1:8000/ask \
 curl -X POST http://127.0.0.1:8000/insert \
   -F "file=@/caminho/para/seu/arquivo.pdf"
 ```
+---
 
-## 📦 Estrutura de dados
-```bash
-documents/
-├── *.pdf
-storage/
-├── index.faiss
-├── index.pkl
-```
+## 🧠 Decisões de Arquitetura
 
-## 🧠 Pipeline do sistema
-1. Carregamento dos PDFs
-2. Divisão em chunks
-3. Geração de embeddings
-4. Indexação vetorial (FAISS)
-5. Recuperação de contexto relevante
-6. Geração de resposta com LLM
+### Uso de FAISS
 
-## ⚠️ Limitações
+Escolhido para simplicidade e performance local.
 
-- Responde apenas com base nos documentos carregados
-- Não possui autenticação na API
-- Indexação pode aumentar o tempo de startup
-- Não possui persistência externa (dados ficam no container)
+### Separação API vs UI
 
-## Próximas melhorias
+Permite:
 
-- [ ] Observabilidade
-- [ ] Deploy em Kubernetes
+* Escalar backend independentemente
+* Trocar frontend no futuro
 
-## Tecnologias
+### Persistência local (JSON)
 
-- Python
-- FastAPI
-- LangChain
-- OpenAI API
-- FAISS
-- Docker
+Suficiente para portfólio, evitando complexidade prematura.
 
-## 💡 Considerações
+---
 
-Este projeto representa a evolução de um RAG simples para uma aplicação mais próxima de um ambiente real, incorporando:
+## ⚠️ Trade-offs
 
-- API REST
-- Containerização
-- Organização modular
+* FAISS local não é distribuído
+* Histórico não é multi-usuário
+* Sem autenticação
 
-Servindo como base para estudos em:
+Essas decisões foram intencionais para manter foco em aprendizado e entrega.
 
-- MLOps
-- AI Platform Engineering
-- Sistemas com LLM em produção
+---
+
+## 🔮 Evolução Natural
+
+Este projeto foi estruturado para evoluir facilmente para:
+
+* Armazenamento em S3
+* Banco vetorial com pgvector
+* Deploy em Kubernetes
+* Autenticação e multi-tenant
+* Observabilidade (logs/metrics)
+
+---
+
+## 📊 O que este projeto demonstra
+
+* Construção de sistemas com LLM
+* Arquitetura RAG end-to-end
+* Exposição via API
+* Integração backend + frontend
+* Boas práticas de organização e evolução
+
+---
+
+## 🧩 Conclusão
+
+Este projeto representa a transição de um experimento de IA para uma **plataforma estruturada**, demonstrando capacidade de projetar, implementar e evoluir sistemas baseados em LLMs.
+
+Ele serve como base sólida para estudos em:
+
+* MLOps
+* AI Platform Engineering
+* Sistemas de IA em produção
