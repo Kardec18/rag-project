@@ -81,3 +81,8 @@ async def insert_pdf(file: UploadFile = File()):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao inserir arquivo: {str(e)}")
+    
+@app.post("/title")
+async def gerar_titulo(user_input: UserQuestion):
+    titulo = user_input.question[:50]  # simples (ou chama LLM)
+    return {"title": titulo}
